@@ -65,24 +65,6 @@ app.get("/contact", function(req, res) {
   res.render("contact", {contactContent: contactContent});
 });
 
-app.get("/compose", function(req, res) {
-  res.render("compose");
-});
-
-app.post("/compose", function(req, res) {
-  
-  const post = new Post ({
-    title: req.body.postTitle,
-    content: req.body.postContent
-  });
-
-  post.save().then(function () {
-    res.redirect("/");
-  }).catch(function(err) {
-    console.log("Error during saving the post!")
-  });
-});
-
 app.get("/posts/:postID", function(req, res){
   
   const requestedPostId = req.params.postID;
@@ -98,12 +80,43 @@ app.get("/posts/:postID", function(req, res){
   });
 });
 
-app.get("login", (req, res) =>{
-  app.render("login")
+app.get("/login", (req, res) =>{
+  res.render("login");
 });
 
 app.post("/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
 
+  User.findOne({email: username}, (err, foundUser) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        if (foundUser.password === password) {
+          res.render("compose");
+        };
+      };
+    };
+  });
+});
+
+app.post("/compose", function(req, res) {
+  
+  const post = new Post ({
+    title: req.body.postTitle,
+    content: req.body.postContent
+  });
+
+  post.save().then(function () {
+    res.redirect("/");
+  }).catch(function(err) {
+    console.log("Error during saving the post!");
+  });
+});
+
+app.get("/logout", (req, res) => {
+  res.redirect("/");
 });
 
 app.listen(process.env.PORT, function() {
