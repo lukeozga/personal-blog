@@ -17,7 +17,6 @@ services:
       - ../.:/app
   
   mongo:
-    restart: always
     container_name: mongo
     image: mongo
     ports:

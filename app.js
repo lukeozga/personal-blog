@@ -35,6 +35,13 @@ const postSchema = {
 
 const Post = mongoose.model("Post", postSchema);
 
+const userSchema = {
+  email: String,
+  password: String
+}
+
+const User = mongoose.model("User", userSchema);
+
 // Create routes
 app.get("/", function(req, res) {
   
@@ -89,6 +96,14 @@ app.get("/posts/:postID", function(req, res){
       console.log("Cannot load the post.")
     }; 
   });
+});
+
+app.get("login", (req, res) =>{
+  app.render("login")
+});
+
+app.post("/login", (req, res) => {
+
 });
 
 app.listen(process.env.PORT, function() {

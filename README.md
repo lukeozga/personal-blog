@@ -24,15 +24,19 @@ During build and initial setup the following things happen:
 * application image is built 
 * mongo image is pulled locally
 * both containers start
-* `root` user for mongodb is created in `admin` db:
+* root database user for mongodb is created in `admin` db:
     * username: root
     * password: root
-* `blogDB` database is created 
-* `blog` user for mongodb with read/write access to `blogDB` database is created
+* application user with read/write access to `blogDB` database is created in `admin` db:
+    * username: blogapp
+    * password: blogapp
+* test user is created in `users` collection inside `blogDB` for website login and testing:
+    * username: testuser@test.com
+    * password: test
 
 Application is accessible under following address: http://127.0.0.1:3000/
 
-To access database container run:
+To access database directly in container run:
 ```
-docker exec -it mongo mongo 
+docker exec -it mongo mongo admin -u root -p root
 ```
