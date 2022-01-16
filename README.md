@@ -4,6 +4,10 @@ Personal blog application written in Node.js and Express.js. Application uses EJ
 ## Development setup
 For convenience, application has been containerized. This makes setting up of development environment much easier. To set up development environment:
 
+* Install required dependencies locally:
+    ```
+    npm install
+    ```
 * Navigate to `docker` directory:
     ```
     cd docker
@@ -40,3 +44,6 @@ To access database directly in container run:
 ```
 docker exec -it mongo mongo admin -u root -p root
 ```
+
+## Authentication
+Application supports simple authentication mechanism implemented with Passport.js middleware. Upon successful login, user session is being created. Default session duration is 10 minutes or until logged out. By default session is stored in memory, not dedicated database for simplicity reasons.

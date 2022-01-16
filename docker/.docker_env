@@ -3,3 +3,5 @@ DB_URL=mongodb://mongo:27017/blogDB
 APP_USER=blogapp
 APP_PASSWORD=blogapp
 AUTH_SOURCE=admin
+ENV=development
+SESSION_SECRET=sessionSecret
