@@ -34,8 +34,8 @@ const session = {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      sameSite: "strict",
-      maxAge: (1000 * 60 * 10)
+      sameSite: "lax",
+      maxAge: (1000 * 60 * 30)
     },
     store: MongoStore.create({
       client: mongoose.connection.getClient(),
@@ -48,9 +48,10 @@ const session = {
 
 app.use(expressSession(session));
 
-// Trust first proxy and serve secure cookies if in production environment (application won't work correctly without server certificate)
-if (process.env.ENV === 'production') {
-    app.set('trust proxy', 1);
+// Trust first proxy and serve secure cookies if in production environment
+// (application won't work correctly without server certificate)
+if (process.env.ENV === "production") {
+    app.set("trust proxy", 1);
     session.cookie.secure = true;
 } else {
     console.log("Starting in development, cookie security settings disabled");
@@ -61,6 +62,16 @@ app.use(csurf());
 
 // Configure router middleware
 app.use("/", routes.router);
+
+// Add custom middleware to redirect to render "404" page if no route has 
+// been found or 500 page with generic error message in case of any internal server errors
+app.use(function(req,res){
+  res.status(404).render('404');
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).render("500");
+});
 
 // Configure server port
 app.listen(process.env.PORT, () => {
