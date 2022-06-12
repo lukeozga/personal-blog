@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// ------------------------ Create database schemas and models ----------------------
+// Create database schemas and models
 const postSchema = {
     title: String,
     content: String

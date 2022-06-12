@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router()
-const passport = require("passport");
-const models = require('./models')
-// ------------------------- Create routes ---------------------------
+const router = express.Router();
+const models = require("./models.js");
+
+// Create routes
 router.get("/", function(req, res) {
     models.Post.find({}, function(err, posts) {
         if (!err) {
@@ -25,29 +25,41 @@ router.get("/contact", function(req, res) {
   
 router.get("/posts/:postID", function(req, res){
     const requestedPostId = req.params.postID;
-    models.Post.findOne({_id: requestedPostId}, function(err, post) {
+    models.Post.findOne({_id: requestedPostId}, (err, post) => {
         if (!err) {
             res.render("post", {
                 title: post.title,
                 content: post.content
             });
         } else {
-            console.log("Cannot load the post.")
+            console.log("Cannot load the post.");
         }; 
     });
 });
   
-router.get("/login", (req, res) =>{
+router.get("/login", (req, res) => {
+    if (req.session.isAuthenticated === true) {
+        res.redirect("/admin");
+    }
     res.render("login");
 });
   
-router.post("/login", passport.authenticate('local', {
-    failureRedirect: "/login",
-    successRedirect: "/admin"
-}));
+router.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    models.User.findOne({ email: email }, (err, user) => {
+        if (err || !user ||  user.password !== password) {
+            res.redirect("/login");
+        }
+        req.session.isAuthenticated = true;
+        req.session.save(() => {
+            res.render("admin");
+        });
+    });
+});
   
 router.get("/admin", (req, res) => {
-    if (req.isAuthenticated() === true) {
+    if (req.session.isAuthenticated === true) {
         res.render("admin");
     } else {
         res.redirect("/login");
@@ -55,7 +67,7 @@ router.get("/admin", (req, res) => {
 })
   
 router.post("/admin", (req, res) => {
-    if (req.isAuthenticated() === true) {
+    if (req.session.isAuthenticated === true) {
         const post = new models.Post ({
             title: req.body.postTitle,
             content: req.body.postContent
@@ -71,8 +83,12 @@ router.post("/admin", (req, res) => {
 });
   
 router.get("/logout", (req, res) => {
-    req.logout();
-    res.redirect("/login");
+    req.session.isAuthenticated = false;
+    req.session.save(() => {
+        res.redirect("/login");
+    });
 });
 
-module.exports = router
+module.exports = {
+    router: router
+}

@@ -1,5 +1,6 @@
 PORT=3000
-DB_URL=mongodb://mongo:27017/blogDB
+DB_URI=mongodb://mongo:27017
+DB_NAME=blogDB
 APP_USER=blogapp
 APP_PASSWORD=blogapp
 AUTH_SOURCE=admin

@@ -2,23 +2,23 @@
 Personal blog application written in Node.js and Express.js. Application uses EJS as view engine.
 
 ## Development setup
-For convenience, application has been containerized. This makes setting up of development environment much easier. To set up development environment:
+For convenience, application has been containerized. This makes setting up of development environment much easier. To set up development environment run:
 
-* Install required dependencies locally:
-    ```
-    npm install
-    ```
-* Navigate to `docker` directory:
-    ```
-    cd docker
-    ```
-* Run docker-compose command to bring the service up and down:
-    ```
-    docker-compose up
-    ```
-    ```
-    docker-compose down
-    ```
+```
+npm run dev-server
+```
+This command will:
+
+* Install required dependencies locally
+* Navigate to `docker` directory
+* Run docker-compose command to bring the service up
+
+To bring service down run:
+
+```
+docker-compose down
+```
+
 Root directory is automatically mapped to `/app` directory inside container which allows to make chnages and get instant feedback:
 
 * Any chnages to app.js file will trigger restart of node application
@@ -34,6 +34,7 @@ During build and initial setup the following things happen:
 * application user with read/write access to `blogDB` database is created in `admin` db:
     * username: blogapp
     * password: blogapp
+* `users` and `sessions` collection is created
 * test user is created in `users` collection inside `blogDB` for website login and testing:
     * username: testuser@test.com
     * password: test
@@ -46,4 +47,6 @@ docker exec -it mongo mongo admin -u root -p root
 ```
 
 ## Authentication
-Application supports simple authentication mechanism implemented with Passport.js middleware. Upon successful login, user session is being created. Default session duration is 10 minutes or until logged out. By default session is stored in memory, not dedicated database for simplicity reasons.
+Application supports simple authentication mechanism implemented with express-session middleware. Upon successful login, user session is being created. Default session duration is 10 minutes or until logged out. 
+
+Sessions are stored in `blogDB` in `sessions` collection. The connection uses `connect-mongo` library which allows to utilize existing connection to setup sessions store. Sessions are encrypted at rest with AES256.
