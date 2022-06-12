@@ -5,13 +5,16 @@ const mongoose = require("mongoose");
 const expressSession = require("express-session");
 const MongoStore = require('connect-mongo');
 const routes = require("./modules/routes.js");
+const csurf = require('csurf')
 
-// Create and configure Express application and basic middleware
+// Create Express application and configure basic middleware
 const app = express();
-app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+
+// Configure view engine
+app.set("view engine", "ejs");
 
 // Configure MongoDB connection
 const options = {
@@ -52,6 +55,9 @@ if (process.env.ENV === 'production') {
 } else {
     console.log("Starting in development, cookie security settings disabled");
 };
+
+// Configure CSRF protection middleware using csurf library
+app.use(csurf());
 
 // Configure router middleware
 app.use("/", routes.router);

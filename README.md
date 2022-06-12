@@ -50,3 +50,9 @@ docker exec -it mongo mongo admin -u root -p root
 Application supports simple authentication mechanism implemented with express-session middleware. Upon successful login, user session is being created. Default session duration is 10 minutes or until logged out. 
 
 Sessions are stored in `blogDB` in `sessions` collection. The connection uses `connect-mongo` library which allows to utilize existing connection to setup sessions store. Sessions are encrypted at rest with AES256.
+
+# CSRF protection
+Every form contains input with CSRF token to provide CSRF protection implemented with `csurf` library.
+
+# Input validation
+Application uses node built-in character escape mechanism. To render HTML node allows to use `<%- HTMLToRender -%>`. For any user input `<%= inputToRender -%>` is used instead. This treats input as strings and provide basic protection against XSS.

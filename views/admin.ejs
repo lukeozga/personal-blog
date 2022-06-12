@@ -2,6 +2,7 @@
 
 <h1>Compose</h1>
 <form action="/admin" method="post">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="m-2">
         <label for="postTitle" class="form-label">Post title</label>
         <input  class="form-control" type="text" name="postTitle" id="postTitle" placeholder="Post title" autocomplete="off"></input>

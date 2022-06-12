@@ -38,10 +38,11 @@ router.get("/posts/:postID", function(req, res){
 });
   
 router.get("/login", (req, res) => {
+    const csrfToken = req.csrfToken()
     if (req.session.isAuthenticated === true) {
-        res.redirect("/admin");
+        return res.redirect("/admin");
     }
-    res.render("login");
+    res.render("login", { csrfToken: csrfToken });
 });
   
 router.post("/login", (req, res) => {
@@ -53,14 +54,15 @@ router.post("/login", (req, res) => {
         }
         req.session.isAuthenticated = true;
         req.session.save(() => {
-            res.render("admin");
+            res.redirect("/admin");
         });
     });
 });
   
 router.get("/admin", (req, res) => {
+    const csrfToken = req.csrfToken()
     if (req.session.isAuthenticated === true) {
-        res.render("admin");
+        res.render("admin", { csrfToken: csrfToken });
     } else {
         res.redirect("/login");
     };
