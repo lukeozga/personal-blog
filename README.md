@@ -13,7 +13,7 @@ This command will:
 * Navigate to `docker` directory
 * Run docker-compose command to bring the service up
 
-To bring service down run:
+To stop the serice run:
 
 ```
 docker-compose down
@@ -45,6 +45,8 @@ To access database directly in container run:
 ```
 docker exec -it mongo mongo admin -u root -p root
 ```
+## Login
+`Login` and `Admin` pages are not referenced or linked by default anywhere. To login or please visit `http://127.0.0.1:3000/login` in development environment.
 
 ## Authentication
 Application supports simple authentication mechanism implemented with express-session middleware. Upon successful login, user session is being created. Default session duration is 30 minutes or until logged out. 
@@ -59,3 +61,14 @@ Application uses node built-in character escape mechanism. To render HTML node a
 
 ## Error handling
 Custom middleware returns page `404` if no route has been found. In case of any internal server errors, Express default error handler is being used to present generic `500` page to the user.
+
+## Headers
+Response headers have been configured with `helmet.js`. Custom security policy allows to use `bootstrap` package.
+
+## Cookies
+By defaul the following cookies attributes are set: 
+
+* `httpOnly: true`
+* `sameSite: lax`
+
+If `ENV` environmental variable is set to production, cookies `secure` attribute is set to `true`. This setting requires SSL certificate which is not configure by default in development environment.

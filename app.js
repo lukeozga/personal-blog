@@ -11,7 +11,6 @@ const publicRouter = require("./routes/publicRoutes");
 const authRouter = require("./routes/authRoutes");
 const errorHandlers = require("./middleware/errorHandlers");
 
-
 // Create Express application and configure basic middleware
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -30,6 +29,7 @@ if (process.env.ENV === "production") {
 };
 
 // Secure headers with helmet
+app.use(helmetConfig.configureHelmetDefault());
 app.use(helmetConfig.configureHelmetCPS());
 
 // Configure session
