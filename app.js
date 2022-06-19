@@ -2,12 +2,11 @@
 const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
-const mongoose = require("mongoose");
 const helmet = require("helmet");
-
-const dbConfig = require("./config/dbConfig");
-const sessionConfig = require("./config/sessionConfig");
 const csurf = require('csurf');
+
+const connectDB = require("./config/dbConfig");
+const sessionConfig = require("./config/sessionConfig");
 const publicRouter = require("./routes/publicRoutes");
 const authRouter = require("./routes/authRoutes");
 const errorHandlers = require("./middleware/errorHandlers");
@@ -21,17 +20,8 @@ app.use(express.static("public"));
 // Configure view engine
 app.set("view engine", "ejs");
 
-// Initialize DB connection
-const connectionString = `${process.env.DB_URI}/${process.env.DB_NAME}`;
-mongoConnection = mongoose.connect(connectionString, dbConfig.createDBOptions());
-
-mongoose.connection.on("error", err => {
-  console.log("err", err);
-});
-
-mongoose.connection.on("disconnected", () => {
-  console.log("Mongoose is disconnected")
-});
+// Initialize DB connection and create client
+mongoClient = connectDB();
 
 // Trust first proxy if in production environment
 if (process.env.ENV === "production") {
@@ -42,7 +32,7 @@ if (process.env.ENV === "production") {
 app.use(helmet());
 
 // Configure session
-app.use(session(sessionConfig.createSessionOptions(mongoose.connection.getClient())));
+app.use(session(sessionConfig.createSessionOptions(mongoClient)));
 
 // Configure CSRF protection middleware using csurf library
 app.use(csurf());

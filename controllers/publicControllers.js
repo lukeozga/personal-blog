@@ -22,9 +22,17 @@ function getContact(req, res) {
 
 function getPost(req, res){
     const requestedPostId = req.params.postID;
-    res.render("post", {
-        title: post.title,
-        content: post.content
+    models.Post.findOne({_id: requestedPostId}, (err, post) => {
+        if (!err) {
+            res.render("post", {
+                title: post.title,
+                content: post.content,
+                username: post.author,
+                date: post.publishedOn 
+            });
+        } else {
+            console.log("Cannot load the post.");
+        }; 
     });
 };
 

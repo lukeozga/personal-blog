@@ -13,7 +13,8 @@ function postAdmin(req, res) {
     if (req.session.isAuthenticated === true) {
         const post = new models.Post ({
             title: req.body.postTitle,
-            content: req.body.postContent
+            content: req.body.postContent,
+            author: req.session.username
         });
         post.save().then(() => {
             res.redirect("/");
@@ -32,6 +33,7 @@ function postLogin(req, res) {
         if (err || !user ||  user.password !== password) {
             res.redirect("/login");
         }
+        req.session.username = user.username;
         req.session.isAuthenticated = true;
         req.session.save(() => {
             res.redirect("/admin");

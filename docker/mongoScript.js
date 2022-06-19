@@ -14,7 +14,8 @@ blogDB = db.getSiblingDB("blogDB");
 blogDB.createCollection('users', { capped: false });
 blogDB.users.insert({
     email: "testuser@test.com",
-    password: "test"
+    password: "test",
+    username: "testuser"
 });
 print("Collection and test user created.");
 
