@@ -1,4 +1,5 @@
 const models = require("../data/dbSchemas.js");
+const utils = require("../utils/utils")
 
 function getHome(req, res) {
     models.Post.find({}, function(err, posts) {
@@ -24,11 +25,12 @@ function getPost(req, res){
     const requestedPostId = req.params.postID;
     models.Post.findOne({_id: requestedPostId}, (err, post) => {
         if (!err) {
+            date = utils.formatDate(post.publishedOn);
             res.render("post", {
                 title: post.title,
                 content: post.content,
                 username: post.author,
-                date: post.publishedOn 
+                date: date
             });
         } else {
             console.log("Cannot load the post.");
