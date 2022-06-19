@@ -2,14 +2,15 @@
 const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
-const helmet = require("helmet");
 const csurf = require('csurf');
 
 const connectDB = require("./config/dbConfig");
 const sessionConfig = require("./config/sessionConfig");
+const helmetConfig = require("./config/helmetConfig");
 const publicRouter = require("./routes/publicRoutes");
 const authRouter = require("./routes/authRoutes");
 const errorHandlers = require("./middleware/errorHandlers");
+
 
 // Create Express application and configure basic middleware
 const app = express();
@@ -29,7 +30,7 @@ if (process.env.ENV === "production") {
 };
 
 // Secure headers with helmet
-app.use(helmet());
+app.use(helmetConfig.configureHelmetCPS());
 
 // Configure session
 app.use(session(sessionConfig.createSessionOptions(mongoClient)));

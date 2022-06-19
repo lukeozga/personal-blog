@@ -7,7 +7,7 @@
         <% posts.forEach(function(post) { %>
             <div>
                 <h2 class="text-start"><%= post.title %></h2>
-                <h5 class="text-start">Created by <%= post.author %> on <%= post.publishedOn >"</h5>
+                <h5 class="text-start">Created by <%= post.author %> on <%= post.publishedOn %>"</h5>
                 <p class="text-start">
                     <%= post.content.substring(0, 100) + " ..." %>
                     <a href="/posts/<%= post._id %>">Read More</a>
